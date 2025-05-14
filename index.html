@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Экспертная система для консультирования фермеров по защите масличных растений от вредителей</title>
+    <title>Экспертная система для фермеров</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
 <body>
-    <h1>Экспертная система для консультирования фермеров по защите масличных растений от вредителей</h1>
+    <h1>Экспертная система для консультирования фермеров</h1>
     <div class="container">
         <label for="crop">Выберите культуру:</label>
         <select id="crop">
@@ -18,8 +18,11 @@
             <option value="горчица">Горчица</option>
             <option value="рыжик">Рыжик</option>
         </select>
-        <div id="questions"></div>
-        <button id="diagnose">Диагностировать</button>
+        <div id="question-container">
+            <p id="current-question"></p>
+            <button id="yes-btn" class="yes-btn">Да</button>
+            <button id="no-btn" class="no-btn">Нет</button>
+        </div>
         <div id="result"></div>
     </div>
 </body>
