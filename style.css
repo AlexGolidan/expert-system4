@@ -1,103 +1,88 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-    margin: 0;
-    padding: 20px;
-    color: #333;
+// Data structure for crops, questions, and recommendations
+const diseaseMap = {
+    "подсолнечник": [
+        { question: "На листьях видны белые пятна?", pest: "мучнистая роса" },
+        { question: "Стебли гниют у основания?", pest: "белая гниль" }
+    ],
+    "рапс": [
+        { question: "Листья желтеют и опадают?", pest: "альтернариоз" },
+        { question: "На стеблях видны чёрные пятна?", pest: "фомоз" }
+    ],
+    "соя": [
+        { question: "На листьях видны мелкие дырочки?", pest: "соевая тля" },
+        { question: "Растения увядают в жару?", pest: "паутинный клещ" }
+    ],
+    "горчица": [
+        { question: "На листьях видны мелкие отверстия?", pest: "крестоцветная блошка" },
+        { question: "Растения ослаблены в сухую погоду?", pest: "тля" }
+    ],
+    "рыжик": [
+        { question: "На листьях видны мелкие отверстия от гусениц?", pest: "капустная моль" },
+        { question: "Растения увядают ночью?", pest: "озимая совка" }
+    ]
+};
+
+const diagnosisMap = {
+    "мучнистая роса": "Опрыскивание фунгицидами, например, серой коллоидной (30 г на 10 л воды).",
+    "белая гниль": "Удаление поражённых растений и обработка фунгицидом (например, Фундазол, 10 г на 10 л воды).",
+    "альтернариоз": "Обработка препаратом Ридомил Голд (25 г на 10 л воды).",
+    "фомоз": "Применение фунгицида Топаз (3 мл на 10 л воды).",
+    "соевая тля": "Опрыскивание инсектицидом Актара (1,4 г на 10 л воды).",
+    "паутинный клещ": "Обработка акарицидом Фитоверм (2 мл на 1 л воды).",
+    "крестоцветная блошка": "Использование ловушек и опрыскивание Карбофосом (60 г на 10 л воды).",
+    "тля": "Обработка инсектицидом Конфидор (1 мл на 10 л воды).",
+    "капустная моль": "Применение биопрепарата Лепидоцид (20-30 г на 10 л воды).",
+    "озимая совка": "Использование феромонных ловушек и опрыскивание Децисом (0,3 мл на 10 л воды)."
+};
+
+let currentCrop = "";
+let currentQuestions = [];
+let currentIndex = 0;
+let confirmedSymptoms = [];
+
+function startDiagnosis() {
+    currentCrop = document.getElementById("crop").value;
+    currentQuestions = diseaseMap[currentCrop];
+    currentIndex = 0;
+    confirmedSymptoms = [];
+
+    document.getElementById("selection").style.display = "none";
+    document.getElementById("questions").style.display = "flex";
+    showQuestion();
 }
 
-h1 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 20px;
-    animation: fadeInDown 1s ease-in-out;
+function showQuestion() {
+    if (currentIndex < currentQuestions.length) {
+        document.getElementById("current-question").textContent = currentQuestions[currentIndex].question;
+        document.getElementById("question-number").textContent = currentIndex + 1;
+        document.getElementById("total-questions").textContent = currentQuestions.length;
+    } else {
+        showResults();
+    }
 }
 
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 1s ease-in-out;
+function answerQuestion(answer) {
+    if (answer) {
+        confirmedSymptoms.push(currentQuestions[currentIndex].pest);
+    }
+    currentIndex++;
+    showQuestion();
 }
 
-label {
-    display: block;
-    margin-top: 20px;
-    font-weight: bold;
+function showResults() {
+    document.getElementById("questions").style.display = "none";
+    document.getElementById("results").style.display = "block";
+
+    const diagnosis = confirmedSymptoms.length > 0 ? confirmedSymptoms[0] : "Не выявлено вредителей";
+    const recommendation = confirmedSymptoms.length > 0 ? diagnosisMap[diagnosis] : "Продолжайте наблюдение за растениями.";
+
+    document.getElementById("result-crop").textContent = currentCrop;
+    document.getElementById("result-symptoms").textContent = confirmedSymptoms.join(", ") || "Отсутствуют";
+    document.getElementById("result-diagnosis").textContent = diagnosis;
+    document.getElementById("result-recommendation").textContent = recommendation;
 }
 
-select {
-    margin-top: 10px;
-    padding: 10px;
-    width: 100%;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    transition: border-color 0.3s ease;
-}
-
-select:hover {
-    border-color: #a8e063;
-}
-
-#question-container {
-    margin-top: 20px;
-    text-align: center;
-}
-
-#current-question {
-    margin-bottom: 20px;
-    font-size: 1.1em;
-}
-
-.yes-btn, .no-btn {
-    padding: 10px 20px;
-    margin: 0 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
-}
-
-.yes-btn {
-    background: linear-gradient(45deg, #a8e063, #56ab2f);
-}
-
-.no-btn {
-    background: linear-gradient(45deg, #ff6b6b, #c0392b);
-}
-
-.yes-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 128, 0, 0.3);
-}
-
-.no-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(255, 0, 0, 0.3);
-}
-
-#result {
-    margin-top: 20px;
-    padding: 15px;
-    background: #e8f5e9;
-    border-radius: 5px;
-    color: #2c6e49;
-    font-weight: bold;
-    animation: fadeIn 1s ease-in-out;
-    display: none;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+function reset() {
+    document.getElementById("results").style.display = "none";
+    document.getElementById("selection").style.display = "block";
 }

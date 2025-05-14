@@ -3,27 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Экспертная система для фермеров</title>
+    <title>Экспертная система консультирования фермеров</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Экспертная система для консультирования фермеров</h1>
-    <div class="container">
-        <label for="crop">Выберите культуру:</label>
-        <select id="crop">
-            <option value="подсолнечник">Подсолнечник</option>
-            <option value="рапс">Рапс</option>
-            <option value="соя">Соя</option>
-            <option value="горчица">Горчица</option>
-            <option value="рыжик">Рыжик</option>
-        </select>
-        <div id="question-container">
-            <p id="current-question"></p>
-            <button id="yes-btn" class="yes-btn">Да</button>
-            <button id="no-btn" class="no-btn">Нет</button>
+    <div class="result-container">
+        <h1><i class="fas fa-leaf"></i> Экспертная система консультирования фермеров по масличным растениям</h1>
+
+        <div id="selection">
+            <h2>Выбор культуры</h2>
+            <label for="crop">Выберите культуру:</label>
+            <select id="crop">
+                <option value="подсолнечник">Подсолнечник</option>
+                <option value="рапс">Рапс</option>
+                <option value="соя">Соя</option>
+                <option value="горчица">Горчица</option>
+                <option value="рыжик">Рыжик</option>
+            </select>
+            <button class="submit-btn" onclick="startDiagnosis()">Продолжить</button>
         </div>
-        <div id="result"></div>
+
+        <div id="questions" style="display: none;">
+            <h2>Вопросы диагностики</h2>
+            <p id="current-question"></p>
+            <button class="yes-btn" onclick="answerQuestion(true)">Да</button>
+            <button class="no-btn" onclick="answerQuestion(false)">Нет</button>
+            <p>Вопрос <span id="question-number">1</span> из <span id="total-questions"></span></p>
+        </div>
+
+        <div id="results" style="display: none;">
+            <h2>Результат диагностики</h2>
+            <p><strong>Культура:</strong> <span id="result-crop"></span></p>
+            <p><strong>Подтверждённые симптомы:</strong> <span id="result-symptoms"></span></p>
+            <p><strong>Диагноз:</strong> <span id="result-diagnosis"></span></p>
+            <p><strong>Рекомендация:</strong> <span id="result-recommendation" class="recommendation"></span></p>
+            <button class="submit-btn" onclick="reset()">Начать заново</button>
+        </div>
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
